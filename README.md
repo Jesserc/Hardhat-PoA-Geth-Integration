@@ -103,10 +103,11 @@ Creating and connecting a private Go-Ethereum network with Hardhat
    ```json
    {
      "config": {
-       "londonBlock": 4000 // a hard fork would occur to implement London fork upgrades once the node mines/validates up to block 4000
+       "londonBlock": 4000
      }
    }
    ```
+   ```// a hard fork would occur to implement London fork upgrades once the node mines/validates up to block 4000```
 
 2. Re-init (upgrade) nodes:
    ```bash
