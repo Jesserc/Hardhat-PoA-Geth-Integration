@@ -1,0 +1,75 @@
+node 1
+- Public key: 0x3E835c623Bb57926140B3f4C9d945A4d095e6995
+- Password: 12345
+node 2
+- Public key: 0x8A05cE0a845599beD82f13589aFc2F81Ea256Ebd
+- Password: 12345
+node 3
+- Public key: 0x2dF6CE7b0Fbc763ccEE9b6Ccf2CB484A72f5caDc
+- Password: 12345
+
+
+
+-- steps
+mkdir node1
+cd node2
+mkdir data
+geth --datadir "./data" account new
+geth init --datadir data ../genesis.json
+mkdir bnode
+cd bnode
+bootnode --genkey boot.key
+bootnode -nodekey boot.key -addr :30305 //start a network, gives us an enode
+enode://86350457e8966ac7c80802d8b1a1dccb06b22136ff7f416c3a6ccc4947d9baa2503011dc7e74735e23d560fd50c15dada85d2a378649947dcde17abc020afd8e@127.0.0.1:0?discport=30305
+in a new terminal, run: 
+ geth --datadir node1 \
+     --port 30306 \
+     --bootnodes 'enode://86350457e8966ac7c80802d8b1a1dccb06b22136ff7f416c3a6ccc4947d9baa2503011dc7e74735e23d560fd50c15dada85d2a378649947dcde17abc020afd8e@127.0.0.1:0?discport=30305' \
+     --networkid 19026 \
+     --unlock 0x3e6441efd0aba016be6a6357eec79fafd4433f4d \
+     --password node1/password.txt \
+     --authrpc.port 8551 \
+     --mine \
+     --miner.etherbase 0x3e6441efd0aba016be6a6357eec79fafd4433f4d \
+     --http \
+     --http.api 'web3,eth,net,debug,personal' \
+     --http.corsdomain '*' \
+     --allow-insecure-unlock \
+     --http.port 30306
+in a new terminal, run: 
+    geth --datadir node2 \
+     --port 30307 \
+     --bootnodes 'enode://86350457e8966ac7c80802d8b1a1dccb06b22136ff7f416c3a6ccc4947d9baa2503011dc7e74735e23d560fd50c15dada85d2a378649947dcde17abc020afd8e@127.0.0.1:0?discport=30305' \
+     --networkid 19026 \
+     --unlock 0x45750942b281a91226b2f7781eca133caf6a592b \
+     --password node2/password.txt \
+     --authrpc.port 8552
+cd .. and run: geth attach node1/data/geth.ipc  // opens geth javascript console connected to our private node
+
+eth.sendTransaction({
+  to: '0x45750942b281a91226b2f7781eca133caf6a592b',
+  from: eth.accounts[0],
+  value: 25000
+});
+
+eth.getBalance('0x45750942b281a91226b2f7781eca133caf6a592b')
+
+
+
+// to start
+geth --datadir data --networkid 12345
+
+- Scheduling Hard Forks
+- update genesis.json
+{
+  "config": {
+    "londonBlock": 40000
+  }
+}
+- re-init (upgrade) nodes ==>> geth init --datadir data ../genesis.json
+
+
+- Starting node/connecting to network
+- on node one, start a bootstrap node by running: geth --datadir data --networkid 15 --nat extip:192.168.0.192
+- in the same dir but another terminal instance, run: geth attach --exec admin.nodeInfo.enr data/geth.ipc (will return a bootstrap node record, like this: "enr:-KW4QIv1GkPAcnFmhPhjOgu0Y2lpxd65Gc51Tx4IBuToF5YbbeLKAUG15F25lpZPp9xzqBkHD9KbjlKugD0yV70akwSGAY10kQiYg2V0aMnIhCExF_yCnECCaWSCdjSCaXCEwKgAwIlzZWNwMjU2azGhArMJvuIBpTcG3eGLlWwOMw2o9NPfOV56lAhbiMyJM_NXhHNuYXDAg3RjcIJ2X4N1ZHCCdl8")
+- cd node2, and run: geth --datadir data --networkid 12345 --port 30305 --bootnodes <bootstrap-node-record>
