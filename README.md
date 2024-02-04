@@ -1,4 +1,5 @@
-# Hardhat-PoA-Geth Integration 
+# Hardhat-PoA-Geth Integration
+
 Creating and connecting a private Go-Ethereum network with Hardhat
 
 ## Nodes Information
@@ -141,3 +142,14 @@ This should deploy the contract to the local private Geth node and return:
 We can then trace the contract creation transaction with `debug.traceTransaction('your-transaction-hash')` in the Geth JavaScript console opened earlier:
 
 ![Transaction Tracing](images/image2.png)
+
+The Geth JS console comes with the following objects (and sme others):
+
+- eth: Interact with the Ethereum blockchain and smart contracts.
+- web3: Access the Web3.js API for broader blockchain interactions.
+- net: Manage network connections and peers.
+- admin: Manage administrative tasks like node status and peers.
+- debug: Access debugging tools and options.
+- txpool: Query the transaction pool and manage pending transactions.
+- miner: Control mining operations (if applicable).
+- clique: Interact with the Clique Proof-of-Authority consensus engine.
