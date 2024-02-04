@@ -1,4 +1,5 @@
-# Private Blockchain Setup Guide
+# Hardhat-PoA-Geth Integration 
+Creating and connecting a private Go-Ethereum network with Hardhat
 
 ## Nodes Information
 
