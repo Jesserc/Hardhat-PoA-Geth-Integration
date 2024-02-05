@@ -145,7 +145,7 @@ We can then trace the contract creation transaction with `debug.traceTransaction
 
 ![Transaction Tracing](images/image2.png)
 
-The Geth JS console comes with the following objects (and sme others):
+The Geth JS console comes with the following objects (and some others):
 
 - eth: Interact with the Ethereum blockchain and smart contracts.
 - web3: Access the Web3.js API for broader blockchain interactions.
